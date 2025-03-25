@@ -64,7 +64,7 @@ public:
         
         if (isPlaylist) {
             std::cout << "Playlist detected. Only MP4 format will be used.\n";
-            format = "mp4";
+            format = "bestvideo+bestaudio";
         } else {
             std::cout << "Fetching available formats...\n";
             system(("yt-dlp -F " + url).c_str());
@@ -72,11 +72,9 @@ public:
             std::cin >> format;
         }
         
-        std::string command = "yt-dlp -f " + format + " -o '" + outputFolder + "/%(title)s.%(ext)s' " + url;
+        std::string command = "yt-dlp -f " + format + " --merge-output-format mp4 -o '" + outputFolder + "/%(title)s.%(ext)s' " + url;
         
-        if (downloadVideo) {
-            std::cout << (isPlaylist ? "Downloading video playlist in MP4 format...\n" : "Downloading single video...\n");
-        } else {
+        if (!downloadVideo) {
             std::cout << (isPlaylist ? "Downloading audio playlist...\n" : "Downloading single audio...\n");
             command += " --extract-audio";
         }
